@@ -8,5 +8,8 @@ app.use(express.urlencoded({ extended: true }));
 require('./config/mongoose.config');
 require('./routes/pet.routes')(app);
 
+const PORT = process.env.PORT || 8000;
 
-app.listen(8000, () => console.log("Connected to port 8000!"));
+app.listen(PORT, () => {
+  console.log(`Connected to port ${PORT}!`);
+});
