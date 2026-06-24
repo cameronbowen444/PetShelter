@@ -13,7 +13,7 @@ const ShowPet = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/pets/" + id)
+      .get("https://petshelter-dgjy.onrender.com/api/pets/" + id)
       .then((res) => {
         setPet(res.data);
       })

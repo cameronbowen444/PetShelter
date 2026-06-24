@@ -76,7 +76,7 @@ const PetForm = () => {
 
   const createPet = () => {
     axios
-      .post("http://localhost:8000/api/pets", {
+      .post("https://petshelter-dgjy.onrender.com/api/pets", {
         name: name.trim(),
         petType: petType.trim(),
         description: description.trim(),

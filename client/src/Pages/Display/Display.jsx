@@ -17,7 +17,7 @@ const Display = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/pets")
+      .get("https://petshelter-dgjy.onrender.com/api/pets")
       .then((res) => {
         setPets(res.data);
       })
@@ -28,7 +28,7 @@ const Display = () => {
 
   const deletePet = (petId) => {
     axios
-      .delete("http://localhost:8000/api/pets/" + petId)
+      .delete("https://petshelter-dgjy.onrender.com/api/pets/" + petId)
       .then(() => {
         setPets((prevPets) => prevPets.filter((pet) => pet._id !== petId));
         setPetToDelete(null);
@@ -42,7 +42,7 @@ const Display = () => {
     if (!petToAdopt) return;
 
     axios
-      .delete("http://localhost:8000/api/pets/" + petToAdopt._id)
+      .delete("https://petshelter-dgjy.onrender.com/api/pets/" + petToAdopt._id)
       .then(() => {
         setPets((prevPets) =>
           prevPets.filter((pet) => pet._id !== petToAdopt._id)

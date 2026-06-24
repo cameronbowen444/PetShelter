@@ -24,7 +24,7 @@ const Update = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/pets/" + id)
+      .get("https://petshelter-dgjy.onrender.com/api/pets/" + id)
       .then((res) => {
         setName(res.data.name || "");
         setPetType(res.data.petType || "");
@@ -93,7 +93,7 @@ const Update = () => {
 
   const updatePet = () => {
     axios
-      .put("http://localhost:8000/api/pets/edit/" + id, {
+      .put("https://petshelter-dgjy.onrender.com/api/pets/edit/" + id, {
         name: name.trim(),
         petType: petType.trim(),
         description: description.trim(),
