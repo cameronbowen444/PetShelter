@@ -1,0 +1,239 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  padding: 20px;
+  background: rgba(20, 37, 34, 0.38);
+  backdrop-filter: blur(8px);
+
+  display: grid;
+  place-items: center;
+}
+
+.modal {
+  width: min(560px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at top right, rgba(120, 185, 214, 0.16), transparent 16rem),
+    var(--color-card-solid);
+  box-shadow: 0 24px 70px rgba(20, 37, 34, 0.18);
+  padding: 28px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.icon,
+.successIcon {
+  width: 58px;
+  height: 58px;
+  flex: 0 0 58px;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    var(--color-soft-green),
+    var(--color-soft-blue)
+  );
+
+  display: grid;
+  place-items: center;
+
+  font-size: 1.7rem;
+}
+
+.header span,
+.success span {
+  display: inline-flex;
+  margin-bottom: 5px;
+  color: var(--color-primary);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.header h3,
+.success h3 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1.45rem;
+  letter-spacing: -0.05em;
+}
+
+.header p,
+.success p {
+  margin: 8px 0 0;
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+.petPreview {
+  border: 1px solid rgba(56, 152, 166, 0.14);
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    135deg,
+    rgba(221, 242, 236, 0.72),
+    rgba(220, 239, 246, 0.62)
+  );
+  padding: 14px;
+  margin-bottom: 18px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.petBubble {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.78);
+
+  display: grid;
+  place-items: center;
+
+  font-size: 1.2rem;
+}
+
+.petPreview h4 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 0.98rem;
+  letter-spacing: -0.03em;
+}
+
+.petPreview p {
+  margin: 4px 0 0;
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.form {
+  display: grid;
+  gap: 15px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.formGroup label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  margin-bottom: 7px;
+  color: var(--color-text);
+  font-size: 0.84rem;
+  font-weight: 900;
+}
+
+.formGroup label span {
+  border-radius: var(--radius-pill);
+  background: rgba(56, 152, 166, 0.1);
+  color: var(--color-primary-dark);
+  padding: 4px 8px;
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.inputError {
+  border-color: var(--color-danger) !important;
+  box-shadow: 0 0 0 4px rgba(223, 109, 109, 0.1) !important;
+}
+
+.error {
+  margin: 7px 0 0;
+  color: var(--color-danger);
+  font-size: 0.8rem;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.checkBox {
+  border: 1px solid rgba(56, 152, 166, 0.16);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.64);
+  padding: 13px;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.checkBox input {
+  width: auto;
+  margin-top: 2px;
+  accent-color: var(--color-primary);
+}
+
+.checkBoxError {
+  border-color: rgba(223, 109, 109, 0.55);
+  background: rgba(223, 109, 109, 0.07);
+}
+
+.actions {
+  margin-top: 6px;
+
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.success {
+  text-align: center;
+}
+
+.successIcon {
+  margin: 0 auto 16px;
+}
+
+.success p {
+  margin-bottom: 22px;
+}
+
+.success strong {
+  color: var(--color-text);
+}
+
+@media (max-width: 560px) {
+  .modal {
+    padding: 22px;
+  }
+
+  .header {
+    flex-direction: column;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .actions a,
+  .actions button,
+  .success button {
+    width: 100%;
+  }
+}
