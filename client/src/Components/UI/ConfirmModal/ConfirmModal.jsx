@@ -6,8 +6,10 @@ const ConfirmModal = ({
   title,
   message,
   confirmText = "Confirm",
+  loadingText = "Working...",
   cancelText = "Cancel",
   variant = "primary",
+  isLoading = false,
   onConfirm,
   onClose,
 }) => {
@@ -16,18 +18,26 @@ const ConfirmModal = ({
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
-        <div className={styles.icon}>🐾</div>
+        <div className={styles.icon}>
+          {isLoading ? <div className={styles.miniSpinner}></div> : "🐾"}
+        </div>
 
         <h3>{title}</h3>
         <p>{message}</p>
 
+        {isLoading && (
+          <p className={styles.loadingMessage}>
+            Please wait while we update the shelter list.
+          </p>
+        )}
+
         <div className={styles.actions}>
-          <Button variant="outline" onClick={onClose}>
+          <Button variant="outline" onClick={onClose} disabled={isLoading}>
             {cancelText}
           </Button>
 
-          <Button variant={variant} onClick={onConfirm}>
-            {confirmText}
+          <Button variant={variant} onClick={onConfirm} disabled={isLoading}>
+            {isLoading ? loadingText : confirmText}
           </Button>
         </div>
       </div>

@@ -3,63 +3,130 @@ import axios from "axios";
 
 import Button from "../../Components/UI/Button/Button";
 import Card from "../../Components/UI/Card/Card";
-
 import ConfirmModal from "../../Components/UI/ConfirmModal/ConfirmModal";
 import AdoptionModal from "../../Components/UI/AdoptionModal/AdoptionModal";
+import LoadingState from "../../Components/UI/LoadingState/LoadingState";
+import Alert from "../../Components/UI/Alert/Alert";
+
 import { getPetIcon } from "../../utils/getPetIcon";
 
 import styles from "./Display.module.css";
+
+const API_URL = "https://petshelter-dgjy.onrender.com/api/pets";
 
 const Display = () => {
   const [pets, setPets] = useState([]);
   const [petToDelete, setPetToDelete] = useState(null);
   const [petToAdopt, setPetToAdopt] = useState(null);
 
+  const [isLoading, setIsLoading] = useState(true);
+  const [isActionLoading, setIsActionLoading] = useState(false);
+  const [status, setStatus] = useState(null);
+
   useEffect(() => {
     axios
-      .get("https://petshelter-dgjy.onrender.com/api/pets")
+      .get(API_URL)
       .then((res) => {
         setPets(res.data);
       })
       .catch((err) => {
         console.log(err);
+
+        setStatus({
+          type: "error",
+          title: "Could not load pets",
+          message:
+            "The shelter server may be waking up. Give it a few seconds and refresh.",
+        });
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
   const deletePet = (petId) => {
+    if (isActionLoading) return;
+
+    setIsActionLoading(true);
+
     axios
-      .delete("https://petshelter-dgjy.onrender.com/api/pets/" + petId)
+      .delete(`${API_URL}/${petId}`)
       .then(() => {
         setPets((prevPets) => prevPets.filter((pet) => pet._id !== petId));
         setPetToDelete(null);
+
+        setStatus({
+          type: "success",
+          title: "Pet deleted",
+          message: "This pet has been removed from the shelter list.",
+        });
       })
       .catch((err) => {
         console.log(err);
+
+        setStatus({
+          type: "error",
+          title: "Delete failed",
+          message: "Something went wrong while deleting this pet. Try again.",
+        });
+      })
+      .finally(() => {
+        setIsActionLoading(false);
       });
   };
 
   const completeAdoption = () => {
-    if (!petToAdopt) return;
+    if (!petToAdopt || isActionLoading) return;
+
+    setIsActionLoading(true);
 
     axios
-      .delete("https://petshelter-dgjy.onrender.com/api/pets/" + petToAdopt._id)
+      .delete(`${API_URL}/${petToAdopt._id}`)
       .then(() => {
         setPets((prevPets) =>
-          prevPets.filter((pet) => pet._id !== petToAdopt._id)
+          prevPets.filter((pet) => pet._id !== petToAdopt._id),
         );
+
+        setStatus({
+          type: "success",
+          title: "Adoption complete",
+          message: `${petToAdopt.name} has been adopted and removed from the available pets list.`,
+        });
+
         setPetToAdopt(null);
       })
       .catch((err) => {
         console.log(err);
+
+        setStatus({
+          type: "error",
+          title: "Adoption failed",
+          message:
+            "Something went wrong while completing the adoption. Please try again.",
+        });
+      })
+      .finally(() => {
+        setIsActionLoading(false);
       });
   };
 
-
   return (
     <div className={styles.page}>
-      
+      {status && (
+        <Alert
+          type={status.type}
+          title={status.title}
+          message={status.message}
+          onClose={() => setStatus(null)}
+        />
+      )}
 
-      {pets.length === 0 ? (
+      {isLoading ? (
+        <LoadingState
+          title="Loading pets..."
+          message="Fetching the latest shelter list from Render and Atlas."
+        />
+      ) : pets.length === 0 ? (
         <Card className={styles.emptyState}>
           <div className={styles.emptyIcon}>🐾</div>
 
@@ -98,11 +165,19 @@ const Display = () => {
                   Edit
                 </Button>
 
-                <Button variant="green" onClick={() => setPetToAdopt(pet)}>
+                <Button
+                  variant="green"
+                  onClick={() => setPetToAdopt(pet)}
+                  disabled={isActionLoading}
+                >
                   Adopt
                 </Button>
 
-                <Button variant="danger" onClick={() => setPetToDelete(pet)}>
+                <Button
+                  variant="danger"
+                  onClick={() => setPetToDelete(pet)}
+                  disabled={isActionLoading}
+                >
                   Delete
                 </Button>
               </div>
@@ -116,15 +191,18 @@ const Display = () => {
         title="Delete this pet?"
         message={`Are you sure you want to delete ${petToDelete?.name}? This cannot be undone.`}
         confirmText="Delete"
+        loadingText="Deleting..."
         variant="danger"
-        onClose={() => setPetToDelete(null)}
+        isLoading={isActionLoading}
+        onClose={() => !isActionLoading && setPetToDelete(null)}
         onConfirm={() => deletePet(petToDelete._id)}
       />
 
       <AdoptionModal
         isOpen={!!petToAdopt}
         pet={petToAdopt}
-        onClose={() => setPetToAdopt(null)}
+        isLoading={isActionLoading}
+        onClose={() => !isActionLoading && setPetToAdopt(null)}
         onComplete={completeAdoption}
       />
     </div>

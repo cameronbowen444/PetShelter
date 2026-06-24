@@ -11,7 +11,13 @@ const initialForm = {
   agreement: false,
 };
 
-const AdoptionModal = ({ isOpen, pet, onClose, onComplete }) => {
+const AdoptionModal = ({
+  isOpen,
+  pet,
+  isLoading = false,
+  onClose,
+  onComplete,
+}) => {
   const [step, setStep] = useState("form");
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
@@ -45,7 +51,6 @@ const AdoptionModal = ({ isOpen, pet, onClose, onComplete }) => {
     setErrors((prevErrors) => ({
       ...prevErrors,
       [field]: "",
-      form: "",
     }));
   };
 
@@ -58,7 +63,8 @@ const AdoptionModal = ({ isOpen, pet, onClose, onComplete }) => {
     } else if (form.pickupName.trim().length < 3) {
       newErrors.pickupName = "Name must be at least 3 characters.";
     } else if (!/^[a-zA-Z\s'-]+$/.test(form.pickupName.trim())) {
-      newErrors.pickupName = "Name can only include letters, spaces, hyphens, and apostrophes.";
+      newErrors.pickupName =
+        "Name can only include letters, spaces, hyphens, and apostrophes.";
     }
 
     if (!form.pickupPhone.trim()) {
@@ -108,6 +114,8 @@ const AdoptionModal = ({ isOpen, pet, onClose, onComplete }) => {
   };
 
   const handleClose = () => {
+    if (isLoading) return;
+
     resetModal();
     onClose();
   };
@@ -121,8 +129,9 @@ const AdoptionModal = ({ isOpen, pet, onClose, onComplete }) => {
   };
 
   const handleFinish = () => {
+    if (isLoading) return;
+
     onComplete();
-    resetModal();
   };
 
   return (
@@ -271,27 +280,39 @@ const AdoptionModal = ({ isOpen, pet, onClose, onComplete }) => {
                 </Button>
 
                 <Button type="submit" variant="green">
-                  Complete Pickup
+                  Continue
                 </Button>
               </div>
             </form>
           </>
         ) : (
           <div className={styles.success}>
-            <div className={styles.successIcon}>🎉</div>
+            <div className={styles.successIcon}>
+              {isLoading ? <div className={styles.miniSpinner}></div> : "🎉"}
+            </div>
 
             <span>Adoption Complete</span>
             <h3>Congrats on your new pet!</h3>
             <p>
-              {pet.name} has been marked as adopted. Pickup is scheduled for{" "}
+              {pet.name} is ready for pickup on{" "}
               <strong>
                 {form.pickupDate} at {form.pickupTime}
               </strong>
               .
             </p>
 
-            <Button variant="primary" onClick={handleFinish}>
-              Back Home
+            {isLoading && (
+              <p className={styles.loadingText}>
+                Updating the shelter list now...
+              </p>
+            )}
+
+            <Button
+              variant="primary"
+              onClick={handleFinish}
+              disabled={isLoading}
+            >
+              {isLoading ? "Completing..." : "Back Home"}
             </Button>
           </div>
         )}

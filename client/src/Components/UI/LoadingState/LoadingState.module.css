@@ -1,0 +1,60 @@
+.loadingState {
+  min-height: 320px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-card);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(14px);
+  padding: 34px 22px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.spinnerWrap {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  margin-bottom: 18px;
+
+  display: grid;
+  place-items: center;
+}
+
+.spinnerWrap span {
+  position: absolute;
+  font-size: 1.8rem;
+}
+
+.spinner {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 4px solid rgba(56, 152, 166, 0.12);
+  border-top-color: var(--color-primary);
+  animation: spin 0.85s linear infinite;
+}
+
+.loadingState h3 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1.4rem;
+  letter-spacing: -0.04em;
+}
+
+.loadingState p {
+  max-width: 360px;
+  margin: 10px 0 0;
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
